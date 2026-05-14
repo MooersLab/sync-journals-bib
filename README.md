@@ -213,8 +213,7 @@ If `sync-journals-bib` aids your work, please cite the repository.
   title        = {sync-journals-bib: Reconcile BibTeX journal names with org-ref and CASSI},
   year         = {2026},
   howpublished = {\url{https://github.com/MooersLab/sync-journals-bib}},
-  note         = {Emacs Lisp package},
-  doi          = {10.0000/example.0000}
+  note         = {Emacs Lisp package}
 }
 ```
 
