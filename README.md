@@ -4,7 +4,7 @@
 [![Emacs](https://img.shields.io/badge/Emacs-27.1%2B-purple.svg)](https://www.gnu.org/software/emacs/)
 [![Made with Org](https://img.shields.io/badge/Made_with-Emacs_Lisp-7F5AB6.svg)](https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html)
 
-An Emacs Lisp package that reconciles the journal field values of a master BibTeX file with the abbreviation table used by org-ref. It writes ready-to-paste `add-to-list` forms for the journals that are missing and consults the Chemical Abstracts Service Source Index (CASSI) to fill in the official abbreviations.
+An Emacs Lisp package that reconciles the journal field values of a master BibTeX file with the abbreviation table used by org-ref. It writes ready-to-paste `add-to-list` forms for missing journals and consults the Chemical Abstracts Service Source Index (CASSI) to fill in the official abbreviations.
 
 ## Table of contents
 
@@ -224,8 +224,10 @@ If `sync-journals-bib` aids your work, please cite the repository.
 
 ## Author
 
+```
 Blaine Mooers
 Department of Biochemistry and Physiology
 University of Oklahoma Health Campus
 Oklahoma City, Oklahoma, United States 73104
 blaine-mooers@ou.edu
+```
