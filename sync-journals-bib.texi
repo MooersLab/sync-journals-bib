@@ -1,0 +1,225 @@
+\input texinfo  @c -*-texinfo-*-
+@c %**start of header
+@setfilename sync-journals-bib.info
+@settitle Sync Journals Bib User Manual
+@documentencoding UTF-8
+@documentlanguage en
+@c %**end of header
+
+@copying
+Copyright @copyright{} 2026 Blaine Mooers.
+
+Permission is granted to copy, distribute, and modify this manual
+under the terms of the GNU Free Documentation License, version 1.3 or
+any later version published by the Free Software Foundation.
+@end copying
+
+@dircategory Emacs
+@direntry
+* Sync Journals Bib: (sync-journals-bib). Reconcile BibTeX journal names with org-ref and CASSI.
+@end direntry
+
+@titlepage
+@title Sync Journals Bib
+@subtitle Reconcile BibTeX journal names with org-ref and CASSI
+@author Blaine Mooers
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top Sync Journals Bib
+
+This manual documents @code{sync-journals-bib}, an Emacs Lisp package
+that reconciles the journal field values of a master BibTeX file with
+the abbreviation table used by @code{org-ref} and the official
+abbreviation table on the CASSI website.
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Overview::
+* Installation::
+* Configuration::
+* Usage::
+* Commands::
+* Functions::
+* Customization::
+* Testing::
+* License::
+* Index::
+@end menu
+
+
+@node Overview
+@chapter Overview
+
+@code{sync-journals-bib} walks a master BibTeX file, gathers the
+unique journal names that appear in @code{journal} or
+@code{journaltitle} fields, and compares them against the second slot
+of every triple in @code{org-ref-bibtex-journal-abbreviations}. For
+each journal that is missing from that table the package emits a
+ready-to-paste @code{add-to-list} form. When network access is
+available the package also fetches a CASSI search result page and
+fills the third slot with the official Chemical Abstracts Service
+abbreviation.
+
+
+@node Installation
+@chapter Installation
+
+@section Manual install
+
+Clone the repository and add it to your @code{load-path}.
+
+@example
+git clone https://github.com/MooersLab/sync-journals-bib.git
+@end example
+
+Then, in your init file, write the following.
+
+@lisp
+(add-to-list 'load-path "~/path/to/sync-journals-bib")
+(require 'sync-journals-bib)
+@end lisp
+
+@section use-package
+
+@lisp
+(use-package sync-journals-bib
+  :load-path "~/path/to/sync-journals-bib"
+  :commands (sync-journals-bib-sync sync-journals-bib-list-missing))
+@end lisp
+
+
+@node Configuration
+@chapter Configuration
+
+The package exposes four customizable variables.
+
+@vtable @code
+@item sync-journals-bib-file
+Path to the master BibTeX file. The default is
+@file{~/Documents/global.bib}.
+
+@item sync-journals-bib-cassi-url
+URL of a CASSI search result page. The default points at the URL
+supplied by the package author.
+
+@item sync-journals-bib-buffer-name
+Name of the output buffer. The default is @samp{*sync-journals-bib*}.
+
+@item sync-journals-bib-fetch-timeout
+Number of seconds to wait for the CASSI page to download. The default
+is 30.
+@end vtable
+
+
+@node Usage
+@chapter Usage
+
+To run the synchronization, call the main command.
+
+@example
+M-x sync-journals-bib-sync
+@end example
+
+A buffer opens with one @code{add-to-list} form per missing journal.
+Copy the forms into your init file, evaluate them, and you are done.
+
+With a prefix argument the command skips the CASSI lookup. This is
+useful when working offline.
+
+@example
+C-u M-x sync-journals-bib-sync
+@end example
+
+
+@node Commands
+@chapter Commands
+
+@deffn Command sync-journals-bib-sync &optional skip-cassi
+Generate @code{add-to-list} forms for journals missing from
+@code{org-ref-bibtex-journal-abbreviations}. When SKIP-CASSI is
+non-nil, the network lookup is skipped.
+@end deffn
+
+@deffn Command sync-journals-bib-list-missing
+Return the list of journal names found in
+@code{sync-journals-bib-file} but absent from
+@code{org-ref-bibtex-journal-abbreviations}. Useful from a hook or a
+batch script.
+@end deffn
+
+
+@node Functions
+@chapter Functions
+
+The internal helpers are documented for completeness. They are not
+part of the public API and may change without notice.
+
+@deffn Function sync-journals-bib--journals-in-file bibfile
+Return a sorted list of unique journal names found in BIBFILE.
+@end deffn
+
+@deffn Function sync-journals-bib--normalize s
+Normalize string S for case-insensitive comparison.
+@end deffn
+
+@deffn Function sync-journals-bib--known-journals
+Return the list of full journal names known to org-ref.
+@end deffn
+
+@deffn Function sync-journals-bib--missing-journals &optional bibfile
+Return journal names in BIBFILE that are absent from org-ref.
+@end deffn
+
+@deffn Function sync-journals-bib--build-snippet full-name &optional cassi-abbrev key
+Return a formatted @code{add-to-list} form.
+@end deffn
+
+@deffn Function sync-journals-bib--parse-cassi-html html
+Return an alist of (FULL-TITLE . CAS-ABBREV) pulled from HTML.
+@end deffn
+
+
+@node Customization
+@chapter Customization
+
+Open the customization group with @kbd{M-x customize-group RET
+sync-journals-bib RET}. Edit any of the four variables described in
+@ref{Configuration}.
+
+
+@node Testing
+@chapter Testing
+
+The package ships with an ERT test suite. From the source directory,
+run the following.
+
+@example
+make test
+@end example
+
+The Makefile launches Emacs in batch mode, loads the library and the
+test file, and runs every @code{ert-deftest}.
+
+
+@node License
+@chapter License
+
+This program is free software released under the GNU General Public
+License, version 3 or later. See the file @file{COPYING} for details.
+
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye
