@@ -1,6 +1,6 @@
 ;;; sync-journals-bib.el --- Sync BibTeX journal names with org-ref and CASSI -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026 Blaine Mooers
+;; Copyright (C) 2026 Blaine Mooers and University of Oklahoma Board of Regents
 
 ;; Author: Blaine Mooers <blaine-mooers@ou.edu>
 ;; Maintainer: Blaine Mooers <blaine-mooers@ou.edu>
